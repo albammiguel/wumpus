@@ -1,5 +1,7 @@
 package wumpusworld;
 
+import java.util.ArrayList;
+
 /**
  * Contains starting code for creating your own Wumpus World agent.
  * Currently the agent only make a random decision each turn.
@@ -10,6 +12,8 @@ public class MyAgent implements Agent
 {
     private World w;
     int rnd;
+    private ArrayList<Coordinate> closedList;
+    private ArrayList<Coordinate> openList;
     
     /**
      * Creates a new instance of your solver agent.
@@ -31,6 +35,14 @@ public class MyAgent implements Agent
         //Location of the player
         int cX = w.getPlayerX();
         int cY = w.getPlayerY();
+        
+        Coordinate c = new Coordinate(cX, cY);
+        c.createAdjacentNodes();
+        
+        if(!closedList.contains(c)){
+            closedList.add(c);
+        }
+        
         
         
         //Basic action:

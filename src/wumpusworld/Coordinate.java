@@ -6,6 +6,8 @@
 package wumpusworld;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  *
@@ -18,7 +20,7 @@ public class Coordinate {
     private boolean [] percepts;
     private boolean isVisited;
     private int levelDanger;
-    private ArrayList<Coordinate> adjacentsNodes;
+    private ArrayList<Coordinate> adjacentNodes;
     
    //CONSTRUCTOR
    public Coordinate(int x, int y){
@@ -26,8 +28,7 @@ public class Coordinate {
        this.y = y;
        this.percepts = new boolean[5];
        this.levelDanger = 1;
-       this.adjacentsNodes = new ArrayList<Coordinate>();
-       createAdjacentNodes();
+       this.adjacentNodes = new ArrayList<Coordinate>();
    }
    
    
@@ -60,25 +61,72 @@ public class Coordinate {
    }
    
    public ArrayList<Coordinate> getAdjacentNodes(){
-       return adjacentsNodes;
+       return adjacentNodes;
    }
    
-   private void createAdjacentNodes() //4x4
+   public void createAdjacentNodes() //4x4
    {
-       //if (adjacentsNodes.Contains())
-       if (x - 1 != 0) // no left
-            new Coordinate (x - 1,y );
-       if (x + 1 == 5) // no right
-           new Coordinate (x + 1,y );
-       if (y - 1 == 0) // no bottom
-           new Coordinate (x, y - 1) ;
-        if(y + 1 == 5) //no upper
-            new Coordinate (x, y + 1) ;
+       Coordinate adj;
+       if (x - 1 > 0){ // there is left
+           adj = new Coordinate (x - 1,y);
+           addAdjacentNode(adj);
+       }
+       if (x + 1 < 5){ // there is right
+           adj = new Coordinate (x + 1,y );
+           addAdjacentNode(adj);
+       }
+       if (y - 1 > 0){ // there is bottom
+           adj = new Coordinate (x, y - 1);
+           addAdjacentNode(adj);
+       }
+        if(y + 1 < 5){ //there is upper
+            adj = new Coordinate (x, y + 1);
+            addAdjacentNode(adj);
+        }
    }
    
+   private void addAdjacentNode(Coordinate node){
+       if (!adjacentNodes.contains(node))
+               adjacentNodes.add(node);
+   }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Coordinate other = (Coordinate) obj;
+        if (this.x != other.x) {
+            return false;
+        }
+        if (this.y != other.y) {
+            return false;
+        }
+        if (this.isVisited != other.isVisited) {
+            return false;
+        }
+        if (this.levelDanger != other.levelDanger) {
+            return false;
+        }
+        if (!Arrays.equals(this.percepts, other.percepts)) {
+            return false;
+        }
+        if (!Objects.equals(this.adjacentNodes, other.adjacentNodes)) {
+            return false;
+        }
+        return true;
+    }
    
-    
-    
+   
+
     
     
 }
