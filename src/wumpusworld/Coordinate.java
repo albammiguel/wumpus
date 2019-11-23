@@ -27,6 +27,7 @@ public class Coordinate {
        this.percepts = new boolean[5];
        this.levelDanger = 1;
        this.adjacentsNodes = new ArrayList<Coordinate>();
+       createAdjacentNodes();
    }
    
    
@@ -61,6 +62,21 @@ public class Coordinate {
    public ArrayList<Coordinate> getAdjacentNodes(){
        return adjacentsNodes;
    }
+   
+   private void createAdjacentNodes() //4x4
+   {
+       if (adjacentsNodes.Contains())
+       if (x - 1 != 0) // no left
+            new Coordinate (x - 1,y );
+       if (x + 1 == 5) // no right
+           new Coordinate (x + 1,y );
+       if (y - 1 == 0) // no bottom
+           new Coordinate (y - 1, 0) 
+                   
+        if(y + 1 == 5) //no upper
+            new Coordinate ()
+   }
+   
    
     
     
