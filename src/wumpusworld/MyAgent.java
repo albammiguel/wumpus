@@ -125,7 +125,8 @@ public class MyAgent implements Agent
     public int decideRandomMove()
     {
       return (int)(Math.random() * 4);
-      //this is a test
+      
+      //hi there wumpus
     }
     
     
