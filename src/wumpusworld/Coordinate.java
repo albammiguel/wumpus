@@ -65,16 +65,15 @@ public class Coordinate {
    
    private void createAdjacentNodes() //4x4
    {
-       if (adjacentsNodes.Contains())
+       //if (adjacentsNodes.Contains())
        if (x - 1 != 0) // no left
             new Coordinate (x - 1,y );
        if (x + 1 == 5) // no right
            new Coordinate (x + 1,y );
        if (y - 1 == 0) // no bottom
-           new Coordinate (y - 1, 0) 
-                   
+           new Coordinate (x, y - 1) ;
         if(y + 1 == 5) //no upper
-            new Coordinate ()
+            new Coordinate (x, y + 1) ;
    }
    
    
