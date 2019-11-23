@@ -20,7 +20,7 @@ public class Coordinate {
     private boolean [] percepts;
     private boolean isVisited;
     private int levelDanger;
-    private ArrayList<Coordinate> adjacentsNodes;
+    private ArrayList<Coordinate> adjacentNodes;
     
    //CONSTRUCTOR
    public Coordinate(int x, int y){
@@ -28,7 +28,7 @@ public class Coordinate {
        this.y = y;
        this.percepts = new boolean[5];
        this.levelDanger = 1;
-       this.adjacentsNodes = new ArrayList<Coordinate>();
+       this.adjacentNodes = new ArrayList<Coordinate>();
    }
    
    
@@ -61,13 +61,12 @@ public class Coordinate {
    }
    
    public ArrayList<Coordinate> getAdjacentNodes(){
-       return adjacentsNodes;
+       return adjacentNodes;
    }
    
    public void createAdjacentNodes() //4x4
    {
        Coordinate adj;
-       //if (adjacentsNodes.Contains())
        if (x - 1 > 0){ // there is left
            adj = new Coordinate (x - 1,y);
            addAdjacentNode(adj);
@@ -87,8 +86,8 @@ public class Coordinate {
    }
    
    private void addAdjacentNode(Coordinate node){
-       if (!adjacentsNodes.contains(node))
-               adjacentsNodes.add(node);
+       if (!adjacentNodes.contains(node))
+               adjacentNodes.add(node);
    }
 
 
@@ -120,7 +119,7 @@ public class Coordinate {
         if (!Arrays.equals(this.percepts, other.percepts)) {
             return false;
         }
-        if (!Objects.equals(this.adjacentsNodes, other.adjacentsNodes)) {
+        if (!Objects.equals(this.adjacentNodes, other.adjacentNodes)) {
             return false;
         }
         return true;
