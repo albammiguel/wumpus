@@ -12,8 +12,9 @@ public class MyAgent implements Agent
 {
     private World w;
     int rnd;
-    private ArrayList<Coordinate> closedList;
-    private ArrayList<Coordinate> openList;
+    Graph graph;
+    private ArrayList<Node> closedList;
+    private ArrayList<Node> openList;
     
     /**
      * Creates a new instance of your solver agent.
@@ -22,7 +23,8 @@ public class MyAgent implements Agent
      */
     public MyAgent(World world)
     {
-        w = world;   
+        w = world;
+        graph = new Graph(w);
     }
    
             
@@ -35,16 +37,13 @@ public class MyAgent implements Agent
         //Location of the player
         int cX = w.getPlayerX();
         int cY = w.getPlayerY();
+
         
-        Coordinate c = new Coordinate(cX, cY);
-        c.createAdjacentNodes();
-        
-        if(!closedList.contains(c)){
-            closedList.add(c);
-        }
-        
-        
-        
+//        if(!closedList.contains(c)){
+//            closedList.add(c);
+//        }
+//        
+
         //Basic action:
         //Grab Gold if we can.
         if (w.hasGlitter(cX, cY))
@@ -92,7 +91,11 @@ public class MyAgent implements Agent
         }
         
         //decide next move
-        rnd = decideRandomMove();
+        //rnd = decideRandomMove();
+        
+        ArrayList<Node> adjacentNodes = graph.getAdjacentNodes(cX,cY);
+        rnd = decideNextMove(adjacentNodes);
+        
         if (rnd==0)
         {
             w.doAction(World.A_TURN_LEFT);
@@ -122,11 +125,28 @@ public class MyAgent implements Agent
      /**
      * Genertes a random instruction for the Agent.
      */
-    public int decideRandomMove()
+//    public int decideRandomMove()
+//    {
+//      return (int)(Math.random() * 4);
+//    }
+    
+    public int decideNextMove(ArrayList<Node> adjacentNodes)
     {
-      return (int)(Math.random() * 4);
-      
-      //hi there wumpus
+        int move = 1; //left move by default 
+        
+        for (Node n: adjacentNodes)
+        {
+            if (!w.isVisited(n.getX(), n.getY())) //add not visited node to the openlist
+                openList.add(n);
+        }
+        
+        
+        for (Node n : adjacentNodes)
+        {
+           if (!adjacentNodes.get(move).getX())
+        }
+        
+        return move;
     }
     
     

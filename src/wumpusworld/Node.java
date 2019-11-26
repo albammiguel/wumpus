@@ -13,25 +13,31 @@ import java.util.Objects;
  *
  * @author albam
  */
-public class Coordinate {
+public class Node {
     //ATRIBUTES
     private int x;
     private int y;
     private boolean [] percepts;
     private boolean isVisited;
-    private int levelDanger;
-    private ArrayList<Coordinate> adjacentNodes;
+    //private int levelDanger;
+    private int hValue;  //h(n)
+    private int gValue; //g(n)
+    private ArrayList<Node> adjacentNodes;
     
    //CONSTRUCTOR
-   public Coordinate(int x, int y){
+   public Node(int x, int y){
        this.x = x;
        this.y = y;
        this.percepts = new boolean[5];
-       this.levelDanger = 1;
-       this.adjacentNodes = new ArrayList<Coordinate>();
+       //this.levelDanger = 1;
    }
    
+    public int  getX(){return x;}
+    public int  getY(){return y;}
    
+    public boolean  getIsVisited(){return isVisited;}
+    public void setIsVisited(boolean isVisited){this.isVisited = isVisited;}
+    
    public void setPerceptStench(boolean isStench){
        this.percepts[0] = isStench;
    }
@@ -52,40 +58,26 @@ public class Coordinate {
        this.percepts[4] = isScream;
    }
    
-   public void setLevelDanger (int i){
-       this.levelDanger = i;
-   }
+//   public void setLevelDanger (int i){
+//       this.levelDanger = i;
+//   }
+//   
+//   public int getLevelDanger(){
+//       return levelDanger;
+//   }
    
-   public int getLevelDanger(){
-       return levelDanger;
-   }
-   
-   public ArrayList<Coordinate> getAdjacentNodes(){
+   public ArrayList<Node> getAdjacentNodes(){
        return adjacentNodes;
    }
    
-   public void createAdjacentNodes() //4x4
-   {
-       Coordinate adj;
-       if (x - 1 > 0){ // there is left
-           adj = new Coordinate (x - 1,y);
-           addAdjacentNode(adj);
-       }
-       if (x + 1 < 5){ // there is right
-           adj = new Coordinate (x + 1,y );
-           addAdjacentNode(adj);
-       }
-       if (y - 1 > 0){ // there is bottom
-           adj = new Coordinate (x, y - 1);
-           addAdjacentNode(adj);
-       }
-        if(y + 1 < 5){ //there is upper
-            adj = new Coordinate (x, y + 1);
-            addAdjacentNode(adj);
-        }
-   }
+    public void setHeuristicValue(int heuristicValue){this.hValue = heuristicValue;}
+    public int getHeuristicValue(){return  hValue;}
+    
+
    
-   private void addAdjacentNode(Coordinate node){
+   
+   private void addAdjacentNode(Node node)
+   {
        if (!adjacentNodes.contains(node))
                adjacentNodes.add(node);
    }
@@ -93,7 +85,8 @@ public class Coordinate {
 
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) 
+    {
         if (this == obj) {
             return true;
         }
@@ -103,7 +96,7 @@ public class Coordinate {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Coordinate other = (Coordinate) obj;
+        final Node other = (Node) obj;
         if (this.x != other.x) {
             return false;
         }
@@ -113,9 +106,9 @@ public class Coordinate {
         if (this.isVisited != other.isVisited) {
             return false;
         }
-        if (this.levelDanger != other.levelDanger) {
-            return false;
-        }
+//        if (this.levelDanger != other.levelDanger) {
+//            return false;
+//        }
         if (!Arrays.equals(this.percepts, other.percepts)) {
             return false;
         }
