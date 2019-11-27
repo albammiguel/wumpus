@@ -71,8 +71,10 @@ public class Node {
        return adjacentNodes;
    }
    
-    public void setHeuristicValue(int heuristicValue){this.hValue = heuristicValue;}
-    public int getHeuristicValue(){return  hValue;}
+    public void setHValue(int hValue){this.hValue = hValue;}
+    public int getHValue(){return  hValue;}
+    public void setGValue(int gValue){this.gValue = gValue;}
+    public int getGValue(){return  gValue;}
     
 
    

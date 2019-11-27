@@ -139,7 +139,7 @@ public class MyAgent implements Agent
             if (!w.isVisited(n.getX(), n.getY()) && !openList.contains(n)) //add not visited nodes to the openlist
                 openList.add(n);
         }
-        
+        //funcion auxiliar
         for (Node n: openList)
         {
             //update g value for every node
