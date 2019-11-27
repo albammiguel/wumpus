@@ -30,7 +30,7 @@ public class Graph
             }
         }
         
-        for (int x = 1 ; x < 5; x++) //set heuristic value for every coordinate
+        for (int x = 1 ; x < 5; x++) //set heuristic value h(n) for every coordinate
         {
              int hValueX = Math.abs(x - nodeGold.getX());
             for (int y = 1; y < 5; y++) 
@@ -40,9 +40,10 @@ public class Graph
                 
                // if (world.hasWumpus(i, j))
                     
-                graph[x][y].setHeuristicValue(hValue);
+                graph[x][y].setHValue(hValue);
             }
         }
+         graph[1][1].setGValue(0); //g(n) for starting position
     }
     
     public ArrayList<Node> getAdjacentNodes(int x, int y) //4x4
