@@ -136,16 +136,18 @@ public class MyAgent implements Agent
         
         for (Node n: adjacentNodes)
         {
-            if (!w.isVisited(n.getX(), n.getY())) //add not visited node to the openlist
+            if (!w.isVisited(n.getX(), n.getY()) && !openList.contains(n)) //add not visited nodes to the openlist
                 openList.add(n);
         }
         
-        
-        for (Node n : adjacentNodes)
+        for (Node n: openList)
         {
-           if (!adjacentNodes.get(move).getX())
+            //update g value for every node
         }
         
+           if (!closedList.contains( adjacentNodes.get(move))) //add new node visited to the closed list
+               closedList.add(adjacentNodes.get(move));
+       
         return move;
     }
     

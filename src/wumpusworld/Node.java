@@ -22,6 +22,7 @@ public class Node {
     //private int levelDanger;
     private int hValue;  //h(n)
     private int gValue; //g(n)
+    private int fValue; //f(n)
     private ArrayList<Node> adjacentNodes;
     
    //CONSTRUCTOR
