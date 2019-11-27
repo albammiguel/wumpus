@@ -19,8 +19,7 @@ public class Node {
     private int y;
     private boolean [] percepts;
     private boolean isVisited;
-    //private int levelDanger;
-    private int hValue;  //h(n)
+    private int levelDanger;
     private int gValue; //g(n)
     private int fValue; //f(n)
     private ArrayList<Node> adjacentNodes;
@@ -30,6 +29,7 @@ public class Node {
        this.x = x;
        this.y = y;
        this.percepts = new boolean[5];
+       this.levelDanger = 0;
        //this.levelDanger = 1;
    }
    
@@ -70,12 +70,22 @@ public class Node {
    public ArrayList<Node> getAdjacentNodes(){
        return adjacentNodes;
    }
+
+ public boolean  getPerceptStench(){
+      return  this.percepts[0];
+   }
    
-    public void setHValue(int hValue){this.hValue = hValue;}
-    public int getHValue(){return  hValue;}
+ public boolean  getPerceptBreeze(){
+      return  this.percepts[1];
+   }
+   
+   
     public void setGValue(int gValue){this.gValue = gValue;}
     public int getGValue(){return  gValue;}
-    
+    public void setFValue(int fValue){this.fValue = fValue;}
+    public int getFValue(){return  fValue;}
+    public int getLevelDanger(){return levelDanger;}
+    public void setLevelDanger(int levelDanger){this.levelDanger = levelDanger;}
 
    
    
@@ -109,9 +119,6 @@ public class Node {
         if (this.isVisited != other.isVisited) {
             return false;
         }
-//        if (this.levelDanger != other.levelDanger) {
-//            return false;
-//        }
         if (!Arrays.equals(this.percepts, other.percepts)) {
             return false;
         }

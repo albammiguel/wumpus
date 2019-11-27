@@ -14,36 +14,16 @@ import java.util.ArrayList;
 public class Graph 
 {
     World world;
-    Node [][] graph = new Node[4][4];
-    Node nodeGold;
-            
+    Node [][] graph = new Node[5][5];
+    
     public Graph(World world)
     {
         this.world = world;
         for (int x = 1 ; x < 5; x++) //create the graph
         {
             for (int y = 1; y < 5; y++) 
-            {
                 graph[x][y] = new Node(x,y);
-                if (world.hasGlitter(x, y)) //find gold
-                    nodeGold = graph[x][y];
-            }
         }
-        
-        for (int x = 1 ; x < 5; x++) //set heuristic value h(n) for every coordinate
-        {
-             int hValueX = Math.abs(x - nodeGold.getX());
-            for (int y = 1; y < 5; y++) 
-            {
-                int hValueY = Math.abs(y - nodeGold.getY());
-                int hValue = hValueX + hValueY;  //heuristic based on distance to gold (value 0)
-                
-               // if (world.hasWumpus(i, j))
-                    
-                graph[x][y].setHValue(hValue);
-            }
-        }
-         graph[1][1].setGValue(0); //g(n) for starting position
     }
     
     public ArrayList<Node> getAdjacentNodes(int x, int y) //4x4
@@ -54,25 +34,30 @@ public class Graph
        if (x - 1 > 0) // there is left
        { 
            //if (!world.isVisited(x, y))
-                adjacentNodes.add(1,graph[x-1][y]);
+                adjacentNodes.add(graph[x-1][y]);
        }
        if (x + 1 < 5)  // there is right
        {
             //if (!world.isVisited(x, y))
-                adjacentNodes.add(2,graph[x+1][y]);
+                adjacentNodes.add(graph[x+1][y]);
        }
        if (y - 1 > 0) //there is bottom
        {
             //if (!world.isVisited(x, y))
-                adjacentNodes.add(3,graph[x][y-1]);
+                adjacentNodes.add(graph[x][y-1]);
        }
         if(y + 1 < 5)  //there is upper
         {
              //if (!world.isVisited(x, y))
-                adjacentNodes.add(4,graph[x][y+1]);
+                adjacentNodes.add(graph[x][y+1]);
         }
         return adjacentNodes; //1 left, 2 up, 3 right, 4 down
    }
+    
+    public Node getCurrentNode(int cX, int cY)
+    {
+        return graph[cX][cY];
+    }
     
     
    

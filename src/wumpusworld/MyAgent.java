@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 public class MyAgent implements Agent
 {
+    
     private World w;
     int rnd;
     Graph graph;
@@ -24,6 +25,10 @@ public class MyAgent implements Agent
     public MyAgent(World world)
     {
         w = world;
+        
+        this.closedList = new ArrayList<Node>();
+        this.openList = new ArrayList<Node>();
+        
         graph = new Graph(w);
     }
    
@@ -34,16 +39,28 @@ public class MyAgent implements Agent
 
     public void doAction()
     {
+
         //Location of the player
         int cX = w.getPlayerX();
         int cY = w.getPlayerY();
-
         
-//        if(!closedList.contains(c)){
-//            closedList.add(c);
-//        }
-//        
-
+        Node currentNode = graph.getCurrentNode(cX, cY);
+        
+        if (!this.closedList.contains( currentNode)) //add new node visited to the closed list
+        { 
+            closedList.add(currentNode);
+            currentNode.setLevelDanger(0);
+            if (this.openList.contains(currentNode))
+                this.openList.remove(currentNode);
+        }
+        
+         ArrayList<Node> adjacentNodes = graph.getAdjacentNodes(cX,cY);
+         
+        for (Node n: adjacentNodes)
+        {
+            if (!w.isVisited(n.getX(), n.getY()) && !openList.contains(n)) //add not visited nodes to the openlist
+                this.openList.add(n);
+        }
         //Basic action:
         //Grab Gold if we can.
         if (w.hasGlitter(cX, cY))
@@ -63,12 +80,43 @@ public class MyAgent implements Agent
         //Test the environment
         if (w.hasBreeze(cX, cY))
         {
+            currentNode.setPerceptBreeze(true);
+             for (Node n: adjacentNodes)
+            {
+                if (!closedList.contains(n) && !w.isVisited(n.getX(), n.getY()))
+                {
+                    n.setLevelDanger( n.getLevelDanger() +  10);
+                    for (Node n1 : graph.getAdjacentNodes(n.getX(), n.getY())) //check if the premise is wrong and we have more information
+                    {
+                        if ((n1.getPerceptBreeze() == false) && w.isVisited(n1.getX(), n1.getY()))
+                        {
+                            //n1.setPerceptBump(true);
+                            n.setLevelDanger(n.getLevelDanger() - ((n.getLevelDanger() / 10) * 10));
+                        }
+                    }
+                }
+            }
+             
             System.out.println("I am in a Breeze");
         }
         if (w.hasStench(cX, cY))
         {
+            currentNode.setPerceptStench(true);
+            for (Node n: adjacentNodes)
+            {
+                if (!closedList.contains(n)  && !w.isVisited(n.getX(), n.getY())){
+                    n.setLevelDanger( n.getLevelDanger() +  100);
+                    for (Node n1 : graph.getAdjacentNodes(n.getX(), n.getY())) //check if the premise is wrong and we have more information
+                   {
+                       if ((n1.getPerceptStench() == false) && w.isVisited(n1.getX(), n1.getY())){
+                           n.setLevelDanger(n.getLevelDanger() - ((n.getLevelDanger() / 100) * 100));
+                       }
+                   }
+                }
+            }
             System.out.println("I am in a Stench");
         }
+        //UPDATE LEVEL DANGER 
         if (w.hasPit(cX, cY))
         {
             System.out.println("I am in a Pit");
@@ -92,29 +140,28 @@ public class MyAgent implements Agent
         
         //decide next move
         //rnd = decideRandomMove();
+
+        rnd = decideNextMove(adjacentNodes, currentNode);
         
-        ArrayList<Node> adjacentNodes = graph.getAdjacentNodes(cX,cY);
-        rnd = decideNextMove(adjacentNodes);
-        
-        if (rnd==0)
+        if (rnd==0) //izquierda
         {
             w.doAction(World.A_TURN_LEFT);
             w.doAction(World.A_MOVE);
         }
         
-        if (rnd==1)
+        if (rnd==1) //de frente
         {
             w.doAction(World.A_MOVE);
         }
                 
-        if (rnd==2)
+        if (rnd==2) //opuesto
         {
             w.doAction(World.A_TURN_LEFT);
             w.doAction(World.A_TURN_LEFT);
             w.doAction(World.A_MOVE);
         }
                         
-        if (rnd==3)
+        if (rnd==3) //derecha
         {
             w.doAction(World.A_TURN_RIGHT);
             w.doAction(World.A_MOVE);
@@ -130,25 +177,117 @@ public class MyAgent implements Agent
 //      return (int)(Math.random() * 4);
 //    }
     
-    public int decideNextMove(ArrayList<Node> adjacentNodes)
+    public int decideNextMove(ArrayList<Node> adjacentNodes, Node currentNode)
     {
-        int move = 1; //left move by default 
-        
-        for (Node n: adjacentNodes)
+        int bestMove = Integer.MAX_VALUE; //left move by default 
+        int newGValue = Integer.MAX_VALUE;
+        if (!w.isVisited(currentNode.getX(), currentNode.getY()))
         {
-            if (!w.isVisited(n.getX(), n.getY()) && !openList.contains(n)) //add not visited nodes to the openlist
-                openList.add(n);
-        }
-        //funcion auxiliar
-        for (Node n: openList)
-        {
-            //update g value for every node
+            for (Node n: adjacentNodes) //update g value for every node
+            {
+                if (!w.isVisited(n.getX(), n.getY()))
+                    newGValue = currentNode.getGValue() + 1;
+                if (n.getGValue() < newGValue)
+                        n.setGValue(newGValue);
+            }
         }
         
-           if (!closedList.contains( adjacentNodes.get(move))) //add new node visited to the closed list
-               closedList.add(adjacentNodes.get(move));
-       
-        return move;
+        
+        for (Node n: openList) //update the f value
+        {
+            n.setFValue(n.getLevelDanger() + n.getGValue());
+        }
+        
+        Node bestNode =  null;
+        Node possibleNode = null;
+        int bestFValue = Integer.MAX_VALUE;
+
+        for (Node n: openList)// select best move
+        {
+            if (n.getFValue() < bestFValue )
+            {
+                bestFValue = n.getFValue();
+                bestNode = n;
+            }
+            if (bestFValue == n.getFValue() && adjacentNodes.contains(n))
+            {
+                bestFValue = n.getFValue();
+                bestNode = n;
+            }
+        }
+        if (bestNode.getX() > currentNode.getX()) //derecha
+        {
+            boolean isNextNodeTheSameAsBestNode = currentNode.getX() + 1 ==  bestNode.getX() && currentNode.getY() == bestNode.getY();
+            if (w.isVisited(currentNode.getX() + 1, currentNode.getY()) ||  isNextNodeTheSameAsBestNode )
+            {
+                switch(w.getDirection())
+                {
+                    case World.DIR_UP :
+                        return 3;
+                    case World.DIR_RIGHT:
+                        return 1;
+                    case World.DIR_DOWN:
+                        return 0;
+                    case World.DIR_LEFT:
+                        return 2;
+                }
+            }
+        }
+        if (bestNode.getX() < currentNode.getX()) //izquierda
+        {
+            boolean isNextNodeTheSameAsBestNode = currentNode.getX() - 1 ==  bestNode.getX() && currentNode.getY() == bestNode.getY();
+            if (w.isVisited(currentNode.getX() - 1, currentNode.getY()) ||  isNextNodeTheSameAsBestNode )
+            {
+                switch(w.getDirection())
+                {
+                    case World.DIR_UP :
+                        return 0;
+                    case World.DIR_RIGHT:
+                        return 2;
+                    case World.DIR_DOWN:
+                        return 3;
+                    case World.DIR_LEFT:
+                        return 1;
+                }  
+            }
+        }
+        if (bestNode.getY() > currentNode.getY()) //arriba
+        {
+            boolean isNextNodeTheSameAsBestNode = currentNode.getX()  ==  bestNode.getX() && currentNode.getY() + 1 == bestNode.getY();
+             if (w.isVisited(currentNode.getX(), currentNode.getY() + 1) ||  isNextNodeTheSameAsBestNode )
+             {
+                switch(w.getDirection())
+                {
+                    case World.DIR_UP :
+                        return 1;
+                    case World.DIR_RIGHT:
+                        return 0;
+                    case World.DIR_DOWN:
+                        return 2;
+                    case World.DIR_LEFT:
+                        return 3;
+                }
+             }
+            }
+        if (bestNode.getY() < currentNode.getY()) //abajo
+        {
+            boolean isNextNodeTheSameAsBestNode = currentNode.getX()  ==  bestNode.getX() && currentNode.getY() - 1 == bestNode.getY() ;
+             if (w.isVisited(currentNode.getX(), currentNode.getY() - 1) ||  isNextNodeTheSameAsBestNode )
+             {
+                switch(w.getDirection())
+                {
+                    case World.DIR_UP :
+                        return 2;
+                    case World.DIR_RIGHT:
+                        return 3;
+                    case World.DIR_DOWN:
+                        return 1;
+                    case World.DIR_LEFT:
+                        return 0;
+                }
+             }
+        }
+        return -1;
     }
     
     
