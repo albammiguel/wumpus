@@ -39,7 +39,7 @@ public class MyAgent implements Agent
 
     public void doAction()
     {
-
+        System.out.println("--------DOACTION---------");
         //Location of the player
         int cX = w.getPlayerX();
         int cY = w.getPlayerY();
@@ -56,8 +56,10 @@ public class MyAgent implements Agent
         
          ArrayList<Node> adjacentNodes = graph.getAdjacentNodes(cX,cY);
          
+         System.out.println("adjacentNodes: ");
         for (Node n: adjacentNodes)
         {
+            System.out.println("Nodo: " + n.getX() + " , " + n.getY() + " con g(n) " + n.getGValue()  + " con levelDanger " + n.getLevelDanger());
             if (!w.isVisited(n.getX(), n.getY()) && !openList.contains(n)) //add not visited nodes to the openlist
                 this.openList.add(n);
         }
@@ -123,19 +125,19 @@ public class MyAgent implements Agent
         }
         if (w.getDirection() == World.DIR_RIGHT)
         {
-            System.out.println("I am facing Right");
+            //System.out.println("I am facing Right");
         }
         if (w.getDirection() == World.DIR_LEFT)
         {
-            System.out.println("I am facing Left");
+            //System.out.println("I am facing Left");
         }
         if (w.getDirection() == World.DIR_UP)
         {
-            System.out.println("I am facing Up");
+            //System.out.println("I am facing Up");
         }
         if (w.getDirection() == World.DIR_DOWN)
         {
-            System.out.println("I am facing Down");
+            //System.out.println("I am facing Down");
         }
         
         //decide next move
@@ -181,16 +183,19 @@ public class MyAgent implements Agent
     {
         int bestMove = Integer.MAX_VALUE; //left move by default 
         int newGValue = Integer.MAX_VALUE;
-        if (!w.isVisited(currentNode.getX(), currentNode.getY()))
-        {
-            for (Node n: adjacentNodes) //update g value for every node
+       // if (!w.isVisited(currentNode.getX(), currentNode.getY()))
+        //{
+            for (Node n: openList) //update g value for every node
             {
-                if (!w.isVisited(n.getX(), n.getY()))
-                    newGValue = currentNode.getGValue() + 1;
-                if (n.getGValue() < newGValue)
+                //if (!w.isVisited(n.getX(), n.getY()))
+                 if (!w.isVisited(n.getX(), n.getY()) && adjacentNodes.contains(n))
+                 {
+                newGValue = currentNode.getGValue() + 1;
+                if (newGValue <  n.getGValue() || n.getGValue() == 0)
                         n.setGValue(newGValue);
+                 }
             }
-        }
+        //}
         
         
         for (Node n: openList) //update the f value
@@ -201,9 +206,11 @@ public class MyAgent implements Agent
         Node bestNode =  null;
         Node possibleNode = null;
         int bestFValue = Integer.MAX_VALUE;
-
+        
+        System.out.println("openList:");
         for (Node n: openList)// select best move
         {
+            System.out.println("Nodo: " + n.getX() + " , " + n.getY() + " con g(n) " + n.getGValue() + " con levelDanger " + n.getLevelDanger());
             if (n.getFValue() < bestFValue )
             {
                 bestFValue = n.getFValue();
@@ -215,6 +222,8 @@ public class MyAgent implements Agent
                 bestNode = n;
             }
         }
+        
+        System.out.println("Mi bestNode es:" + bestNode.getX() + " , " + bestNode.getY() + " con g(n) " + bestNode.getGValue() + " con levelDanger " + bestNode.getLevelDanger());
         if (bestNode.getX() > currentNode.getX()) //derecha
         {
             boolean isNextNodeTheSameAsBestNode = currentNode.getX() + 1 ==  bestNode.getX() && currentNode.getY() == bestNode.getY();
