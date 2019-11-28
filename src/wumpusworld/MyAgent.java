@@ -45,7 +45,7 @@ public class MyAgent implements Agent
         int cY = w.getPlayerY();
         
         Node currentNode = graph.getCurrentNode(cX, cY);
-        
+         currentNode.setNumVisit(currentNode.getNumVisit()+1);
         if (!this.closedList.contains( currentNode)) //add new node visited to the closed list
         { 
             closedList.add(currentNode);
@@ -85,18 +85,17 @@ public class MyAgent implements Agent
             currentNode.setPerceptBreeze(true);
              for (Node n: adjacentNodes)
             {
-                if (!closedList.contains(n) && !w.isVisited(n.getX(), n.getY()))
-                {
-                    n.setLevelDanger( n.getLevelDanger() +  10);
-                    for (Node n1 : graph.getAdjacentNodes(n.getX(), n.getY())) //check if the premise is wrong and we have more information
-                    {
-                        if ((n1.getPerceptBreeze() == false) && w.isVisited(n1.getX(), n1.getY()))
+                if(currentNode.getNumVisit() == 1){
+                        n.setLevelDanger( n.getLevelDanger() +  10);
+                        for (Node n1 : graph.getAdjacentNodes(n.getX(), n.getY())) //check if the premise is wrong and we have more information
                         {
-                            //n1.setPerceptBump(true);
-                            n.setLevelDanger(n.getLevelDanger() - ((n.getLevelDanger() / 10) * 10));
+                            if ((n1.getPerceptBreeze() == false) && w.isVisited(n1.getX(), n1.getY()))
+                            {
+                                //n1.setPerceptBump(true);
+                                n.setLevelDanger(n.getLevelDanger() - ((n.getLevelDanger() / 10) * 10));
+                            }
                         }
                     }
-                }
             }
              
             System.out.println("I am in a Breeze");
@@ -107,13 +106,15 @@ public class MyAgent implements Agent
             for (Node n: adjacentNodes)
             {
                 if (!closedList.contains(n)  && !w.isVisited(n.getX(), n.getY())){
-                    n.setLevelDanger( n.getLevelDanger() +  100);
-                    for (Node n1 : graph.getAdjacentNodes(n.getX(), n.getY())) //check if the premise is wrong and we have more information
-                   {
-                       if ((n1.getPerceptStench() == false) && w.isVisited(n1.getX(), n1.getY())){
-                           n.setLevelDanger(n.getLevelDanger() - ((n.getLevelDanger() / 100) * 100));
-                       }
+                    if (currentNode.getNumVisit() ==1){
+                        n.setLevelDanger( n.getLevelDanger() +  100);
+                        for (Node n1 : graph.getAdjacentNodes(n.getX(), n.getY())) //check if the premise is wrong and we have more information
+                          {
+                           if ((n1.getPerceptStench() == false) && w.isVisited(n1.getX(), n1.getY())){
+                               n.setLevelDanger(n.getLevelDanger() - ((n.getLevelDanger() / 100) * 100));
+                           }
                    }
+                }
                 }
             }
             System.out.println("I am in a Stench");
@@ -226,7 +227,7 @@ public class MyAgent implements Agent
         System.out.println("Mi bestNode es:" + bestNode.getX() + " , " + bestNode.getY() + " con g(n) " + bestNode.getGValue() + " con levelDanger " + bestNode.getLevelDanger());
         if (bestNode.getX() > currentNode.getX()) //derecha
         {
-            boolean isNextNodeTheSameAsBestNode = currentNode.getX() + 1 ==  bestNode.getX() && currentNode.getY() == bestNode.getY();
+            boolean isNextNodeTheSameAsBestNode = (currentNode.getX() + 1 ==  bestNode.getX() && currentNode.getY() == bestNode.getY());
             if (w.isVisited(currentNode.getX() + 1, currentNode.getY()) ||  isNextNodeTheSameAsBestNode )
             {
                 switch(w.getDirection())
@@ -244,7 +245,7 @@ public class MyAgent implements Agent
         }
         if (bestNode.getX() < currentNode.getX()) //izquierda
         {
-            boolean isNextNodeTheSameAsBestNode = currentNode.getX() - 1 ==  bestNode.getX() && currentNode.getY() == bestNode.getY();
+            boolean isNextNodeTheSameAsBestNode = (currentNode.getX() - 1 ==  bestNode.getX() && currentNode.getY() == bestNode.getY());
             if (w.isVisited(currentNode.getX() - 1, currentNode.getY()) ||  isNextNodeTheSameAsBestNode )
             {
                 switch(w.getDirection())
@@ -262,7 +263,7 @@ public class MyAgent implements Agent
         }
         if (bestNode.getY() > currentNode.getY()) //arriba
         {
-            boolean isNextNodeTheSameAsBestNode = currentNode.getX()  ==  bestNode.getX() && currentNode.getY() + 1 == bestNode.getY();
+            boolean isNextNodeTheSameAsBestNode = (currentNode.getX()  ==  bestNode.getX() && currentNode.getY() + 1 == bestNode.getY());
              if (w.isVisited(currentNode.getX(), currentNode.getY() + 1) ||  isNextNodeTheSameAsBestNode )
              {
                 switch(w.getDirection())
@@ -280,7 +281,7 @@ public class MyAgent implements Agent
             }
         if (bestNode.getY() < currentNode.getY()) //abajo
         {
-            boolean isNextNodeTheSameAsBestNode = currentNode.getX()  ==  bestNode.getX() && currentNode.getY() - 1 == bestNode.getY() ;
+            boolean isNextNodeTheSameAsBestNode = (currentNode.getX()  ==  bestNode.getX() && currentNode.getY() - 1 == bestNode.getY() );
              if (w.isVisited(currentNode.getX(), currentNode.getY() - 1) ||  isNextNodeTheSameAsBestNode )
              {
                 switch(w.getDirection())

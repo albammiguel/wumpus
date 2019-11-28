@@ -18,7 +18,7 @@ public class Node {
     private int x;
     private int y;
     private boolean [] percepts;
-    private boolean isVisited;
+    private int numVisit;
     private int levelDanger;
     private int gValue; //g(n)
     private int fValue; //f(n)
@@ -30,14 +30,11 @@ public class Node {
        this.y = y;
        this.percepts = new boolean[5];
        this.levelDanger = 0;
-       //this.levelDanger = 1;
+       this.numVisit = 0;
    }
    
     public int  getX(){return x;}
     public int  getY(){return y;}
-   
-    public boolean  getIsVisited(){return isVisited;}
-    public void setIsVisited(boolean isVisited){this.isVisited = isVisited;}
     
    public void setPerceptStench(boolean isStench){
        this.percepts[0] = isStench;
@@ -86,6 +83,8 @@ public class Node {
     public int getFValue(){return  fValue;}
     public int getLevelDanger(){return levelDanger;}
     public void setLevelDanger(int levelDanger){this.levelDanger = levelDanger;}
+    public int  getNumVisit(){return numVisit;}
+    public void setNumVisit(int numVisit){this.numVisit = numVisit;}
 
    
    
@@ -116,7 +115,8 @@ public class Node {
         if (this.y != other.y) {
             return false;
         }
-        if (this.isVisited != other.isVisited) {
+       
+        if (this.numVisit != other.numVisit) {
             return false;
         }
         if (!Arrays.equals(this.percepts, other.percepts)) {
