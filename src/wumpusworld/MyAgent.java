@@ -436,8 +436,15 @@ public class MyAgent implements Agent
                     bestNode = n;
                 }
         }
-        int cont = 0;
-        while (cont < 2)
+        
+        if((oldNode.getX() == 1 && oldNode.getX() == 1 && w.hasStench(oldNode.getX(), oldNode.getY())) || (bestNode.getLevelDanger() == 100)){
+            
+             System.out.println("Shoot Wumpus: ");
+             w.doAction(World.A_SHOOT);
+        
+        }
+        //int cont = 0;
+        //while (cont < 2)
         {
             System.out.println("Mi bestNode es:" + bestNode.getX() + " , " + bestNode.getY() + " con g(n) " + bestNode.getGValue() + " con levelDanger " + bestNode.getLevelDanger());
             if (bestNode.getX() > oldNode.getX() && !w.hasPit(oldNode.getX() + 1, oldNode.getY())) //derecha
