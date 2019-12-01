@@ -15,6 +15,7 @@ public class Graph
 {
     World world;
     Node [][] graph = new Node[5][5];
+    Node wumpusNode;
     
     public Graph(World world)
     {
@@ -33,32 +34,25 @@ public class Graph
        
        if (x - 1 > 0) // there is left
        { 
-           //if (!world.isVisited(x, y))
                 adjacentNodes.add(graph[x-1][y]);
        }
        if (x + 1 < 5)  // there is right
        {
-            //if (!world.isVisited(x, y))
                 adjacentNodes.add(graph[x+1][y]);
        }
        if (y - 1 > 0) //there is bottom
        {
-            //if (!world.isVisited(x, y))
                 adjacentNodes.add(graph[x][y-1]);
        }
         if(y + 1 < 5)  //there is upper
         {
-             //if (!world.isVisited(x, y))
                 adjacentNodes.add(graph[x][y+1]);
         }
-        return adjacentNodes; //1 left, 2 up, 3 right, 4 down
+        return adjacentNodes; 
    }
     
-    public Node getCurrentNode(int cX, int cY)
-    {
-        return graph[cX][cY];
-    }
-    
-    
-   
+    public Node getNode(int cX, int cY){return graph[cX][cY];}
+    public Node getWumpusNode(){ return wumpusNode;}
+    public void setWumpusNode(Node wumpusNode){this.wumpusNode = wumpusNode;}
 }
+
