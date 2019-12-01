@@ -58,43 +58,67 @@ public class Node {
     public boolean isWumpus(){return isWumpus;}
     public void isWumpus(boolean isWumpus){this.isWumpus = isWumpus;}
     public boolean isCheckedWumpus(){return isCheckedWumpus;}
-    public void isCheckedWumpus(boolean isCheckedWumpus){this.isCheckedWumpus = isCheckedWumpus;}
+    public void isCheckedWumpus(boolean isCheckedWumpus){this.isCheckedWumpus = isCheckedWumpus;}//
 
-//
-//    @Override
-//    public boolean equals(Object obj) 
-//    {
-//        if (this == obj) {
-//            return true;
-//        }
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final Node other = (Node) obj;
-//        if (this.x != other.x) {
-//            return false;
-//        }
-//        if (this.y != other.y) {
-//            return false;
-//        }
-//       
-//        if (this.numVisit != other.numVisit) {
-//            return false;
-//        }
-//        if (!Arrays.equals(this.percepts, other.percepts)) {
-//            return false;
-//        }
-//        if (!Objects.equals(this.adjacentNodes, other.adjacentNodes)) {
-//            return false;
-//        }
-//        return true;
-//    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Node other = (Node) obj;
+        if (this.x != other.x) {
+            return false;
+        }
+        if (this.y != other.y) {
+            return false;
+        }
+        if (this.levelDanger != other.levelDanger) {
+            return false;
+        }
+        if (this.gValue != other.gValue) {
+            return false;
+        }
+        if (this.isPit != other.isPit) {
+            return false;
+        }
+        if (this.isWumpus != other.isWumpus) {
+            return false;
+        }
+        if (this.isCheckedPit != other.isCheckedPit) {
+            return false;
+        }
+        if (this.isCheckedSquarePit != other.isCheckedSquarePit) {
+            return false;
+        }
+        if (this.isCheckedBreeze != other.isCheckedBreeze) {
+            return false;
+        }
+        if (this.isCheckedWumpus != other.isCheckedWumpus) {
+            return false;
+        }
+        if (this.isCheckedCornerPit != other.isCheckedCornerPit) {
+            return false;
+        }
+        if (!Objects.equals(this.adjacentNodes, other.adjacentNodes)) {
+            return false;
+        }
+        return true;
+    }
+
+    
+   
    
    
 
     
     
 }
+
